@@ -1,6 +1,22 @@
 import mongoose from "mongoose";
 
-const UserSchema = new mongoose.Schema({
+export type UserRequestType = mongoose.Document & {
+   username: string;
+   email: string;
+   password: string;
+};
+
+export type UserModelType = mongoose.Document & {
+   username: string;
+   email: string;
+   authentication: {
+      password: string;
+      salt?: string;
+      sessionToken?: string;
+   };
+};
+
+const UserSchema = new mongoose.Schema<UserModelType>({
    username: { type: String, required: true },
    email: { type: String, required: true },
    authentication: {
@@ -10,11 +26,11 @@ const UserSchema = new mongoose.Schema({
    },
 });
 
-export const UserModel = mongoose.model("User", UserSchema);
+export const UserModel = mongoose.model<UserModelType>("User", UserSchema);
 
 // actions
 export const getUsers = () => UserModel.find();
-export const getUsersByEmail = (email: string) => UserModel.findOne({ email });
+export const getUserByEmail = (email: string) => UserModel.findOne({ email });
 export const getUserBySessionToken = (sessionToken: string) =>
    UserModel.findOne({ "authentication.sessionToken": sessionToken });
 export const getUserById = (id: string) => UserModel.findById({ _id: id });
