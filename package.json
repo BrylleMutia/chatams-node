@@ -9,7 +9,9 @@
       "prestart": "npm run build",
       "start": "node dist/index.js",
       "preserve": "npm run build",
-      "serve": "concurrently \"tsc -w\" \"nodemon dist/index.js\""
+      "serve": "concurrently \"tsc -w\" \"nodemon dist/index.js\"",
+      "test": "tsx watch ./src/index.ts",
+      "_comment": "test is mainly for dev, serve is for prod and dev"
    },
    "keywords": [],
    "author": "",
@@ -23,6 +25,7 @@
       "@types/mongoose": "^5.11.97",
       "@types/node": "^20.12.7",
       "nodemon": "^3.1.0",
+      "tsx": "^4.9.3",
       "typescript": "^5.4.5"
    },
    "dependencies": {
