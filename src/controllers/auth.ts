@@ -1,28 +1,29 @@
 import express from "express";
-import { UserRequestType, createUser, getUserByEmail } from "../db/users.js";
+import { UserModel } from "../models/users.js";
 import { authentication, random } from "../helpers/index.js";
 
-export const register = async (
-   req: express.Request<{}, {}, UserRequestType>,
-   res: express.Response
-) => {
+export const register = async (req: express.Request, res: express.Response) => {
    try {
       const { email, username, password } = req.body;
 
       if (!email || !password || !username) return res.sendStatus(400);
 
-      const existingUser = await getUserByEmail(email);
-      if (existingUser) return res.sendStatus(400);
+      const existingUser = await UserModel.findOne({ email });
+      if (existingUser)
+         return res.status(400).json({ message: "User already exists" }).end();
 
       const salt = random();
-      const user = await createUser({
+      const user = await UserModel.build({
          email,
          username,
          authentication: {
-            salt,
             password: authentication(salt, password),
+            salt,
          },
-      });
+      }).save();
+
+      console.log(user.created_at);
+      console.log(user.updated_at);
 
       return res.status(200).json(user).end();
    } catch (err) {
