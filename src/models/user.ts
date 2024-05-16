@@ -9,12 +9,15 @@ interface IUser {
       salt?: string;
       sessionToken?: string;
    };
+   clientId: mongoose.Types.ObjectId;
+   roleId: mongoose.Types.ObjectId;
+   isApproved: boolean;
 }
 
 // output interface from mongoose
 interface UserDoc extends IUser, mongoose.Document {
-   created_at: Date;
-   updated_at: Date;
+   createdAt: Date;
+   updatedAt: Date;
 }
 
 // Put all user instance methods in this interface (statics)
@@ -25,14 +28,17 @@ interface UserModelType extends mongoose.Model<IUser> {
 const UserSchema = new mongoose.Schema<IUser, UserModelType>(
    {
       username: { type: String, required: true },
-      email: { type: String, required: true },
+      email: { type: String, required: true, lowercase: true },
       authentication: {
          password: { type: String, required: true, select: false },
          salt: { type: String, select: false },
          sessionToken: { type: String, select: false },
       },
+      clientId: { type: mongoose.SchemaTypes.ObjectId, required: true, ref: "Client" },
+      roleId: { type: mongoose.SchemaTypes.ObjectId, required: true, ref: "Role" },
+      isApproved: { type: Boolean, required: true, default: true },
    },
-   { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
+   { timestamps: true }
 );
 UserSchema.static("build", (attr: IUser) => new UserModel(attr));
 
@@ -41,3 +47,7 @@ export const UserModel = mongoose.model<IUser, UserModelType>(
    "User",
    UserSchema
 );
+
+// TODO: Add remaining schema 
+// TODO: Add controllers / blueprints
+// TODO: Add routers
