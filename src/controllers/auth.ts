@@ -1,5 +1,5 @@
 import express from "express";
-import { UserModel } from "../models/users.js";
+import { UserModel } from "../models/user.js";
 import { authentication, random } from "../helpers/index.js";
 
 export const register = async (req: express.Request, res: express.Response) => {
