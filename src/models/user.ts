@@ -28,14 +28,22 @@ interface UserModelType extends mongoose.Model<IUser> {
 const UserSchema = new mongoose.Schema<IUser, UserModelType>(
    {
       username: { type: String, required: true },
-      email: { type: String, required: true, lowercase: true },
+      email: { type: String, required: true, lowercase: true, unique: true },
       authentication: {
          password: { type: String, required: true, select: false },
          salt: { type: String, select: false },
          sessionToken: { type: String, select: false },
       },
-      clientId: { type: mongoose.SchemaTypes.ObjectId, required: true, ref: "Client" },
-      roleId: { type: mongoose.SchemaTypes.ObjectId, required: true, ref: "Role" },
+      clientId: {
+         type: mongoose.SchemaTypes.ObjectId,
+         required: true,
+         ref: "Client",
+      },
+      roleId: {
+         type: mongoose.SchemaTypes.ObjectId,
+         required: true,
+         ref: "Role",
+      },
       isApproved: { type: Boolean, required: true, default: true },
    },
    { timestamps: true }
@@ -48,6 +56,6 @@ export const UserModel = mongoose.model<IUser, UserModelType>(
    UserSchema
 );
 
-// TODO: Add remaining schema 
 // TODO: Add controllers / blueprints
 // TODO: Add routers
+// TODO: How to track objects that need indexing (prev was using separate model)
