@@ -18,7 +18,7 @@ interface ClientModelType extends mongoose.Model<IClient> {
 
 const clientSchema = new mongoose.Schema<IClient, ClientModelType>(
    {
-      name: { type: String, required: true },
+      name: { type: String, required: true, unique: true },
       openAiKey: { type: String, required: false },
    },
    {
@@ -28,6 +28,6 @@ const clientSchema = new mongoose.Schema<IClient, ClientModelType>(
 clientSchema.static("build", (attr: IClient) => new ClientModel(attr));
 
 export const ClientModel = mongoose.model<IClient, ClientModelType>(
-   "client",
+   "Client",
    clientSchema
 );
