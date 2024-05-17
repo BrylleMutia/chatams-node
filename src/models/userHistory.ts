@@ -40,4 +40,4 @@ userHistorySchema.static(
 export const UserHistoryModel = mongoose.model<
    IUserHistory,
    UserHistoryModelType
->("client", userHistorySchema);
+>("UserHistory", userHistorySchema);
