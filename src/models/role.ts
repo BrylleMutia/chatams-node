@@ -17,7 +17,7 @@ interface RoleModelType extends mongoose.Model<IRole> {
 
 const roleSchema = new mongoose.Schema<IRole, RoleModelType>(
    {
-      name: { type: String, required: true },
+      name: { type: String, required: true, unique: true },
    },
    {
       timestamps: true,
@@ -26,6 +26,6 @@ const roleSchema = new mongoose.Schema<IRole, RoleModelType>(
 roleSchema.static("build", (attr: IRole) => new RoleModel(attr));
 
 export const RoleModel = mongoose.model<IRole, RoleModelType>(
-   "client",
+   "Role",
    roleSchema
 );
