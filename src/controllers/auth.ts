@@ -33,7 +33,7 @@ export const register = async (req: express.Request, res: express.Response) => {
          },
          clientId: client_id,
          isApproved: true,
-         roleId: new mongoose.mongo.ObjectId("2"), // admin role id
+         roleId: new mongoose.Types.ObjectId("2"), // admin role id
       }).save();
 
       return res.status(200).json({ data: user }).end();
@@ -139,30 +139,6 @@ export const getUserDetails = async (
       return res
          .status(400)
          .json({ error: `Get user details failed with error: ${err}` });
-   }
-};
-
-export const getUsersInClient = async (
-   req: express.Request,
-   res: express.Response
-) => {
-   try {
-      const clientId = req.params.clientId;
-
-      const existingUsers = await UserModel.find({ clientId });
-
-      if (existingUsers.length < 1)
-         return res
-            .status(400)
-            .json({ message: "No existing users for client" })
-            .end();
-
-      return res.status(200).json({ data: existingUsers }).end();
-   } catch (err) {
-      console.log(err);
-      return res
-         .status(400)
-         .json({ error: `Get users failed with error: ${err}` });
    }
 };
 
