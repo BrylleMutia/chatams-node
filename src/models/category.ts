@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 interface ICategory {
    name: string;
    clientId: mongoose.Types.ObjectId;
+   needIndex?: boolean;
 }
 
 // output interface from mongoose
@@ -19,7 +20,12 @@ interface CategoryModelType extends mongoose.Model<ICategory> {
 const categorySchema = new mongoose.Schema<ICategory, CategoryModelType>(
    {
       name: { type: String, required: true },
-      clientId: { type: mongoose.SchemaTypes.ObjectId, required: true, ref: "Client" },
+      clientId: {
+         type: mongoose.SchemaTypes.ObjectId,
+         required: true,
+         ref: "Client",
+      },
+      needIndex: { type: Boolean, required: true, default: true },
    },
    {
       timestamps: true,
