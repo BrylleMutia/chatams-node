@@ -6,6 +6,8 @@ import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import { authRouter } from "./router/authRouter.js";
+import { clientRouter } from "./router/clientRouter.js";
+import { categoryRouter } from "./router/categoryRouter.js";
 
 dotenv.config();
 
@@ -25,6 +27,8 @@ const initializeApp = () => {
    });
 
    app.use("/auth", authRouter);
+   app.use("/client", clientRouter);
+   app.use("/category", categoryRouter);
 
    return app;
 };
