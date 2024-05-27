@@ -1,5 +1,6 @@
 import express from "express";
 import { UserModel } from "../models/user.js";
+import { ClientModel } from "../models/client.js";
 
 export const getUsersInClient = async (
    req: express.Request,
@@ -22,5 +23,25 @@ export const getUsersInClient = async (
       return res
          .status(400)
          .json({ error: `Get users failed with error: ${err}` });
+   }
+};
+
+export const addNewClient = async (
+   req: express.Request,
+   res: express.Response
+) => {
+   try {
+      const clientName = req.body.clientName;
+
+      const client = await ClientModel.build({
+         name: clientName.toUpperCase(),
+      }).save();
+
+      return res.status(200).json({ data: client });
+   } catch (err) {
+      console.log(err);
+      return res
+         .status(400)
+         .json({ error: `Add new client failed with error: ${err}` });
    }
 };

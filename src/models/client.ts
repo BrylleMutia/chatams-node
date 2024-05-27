@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
-interface IClient {
+export interface IClient {
    name: string;
-   openAiKey: string;
+   openAiKey?: string;
 }
 
 // output interface from mongoose
