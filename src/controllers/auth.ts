@@ -1,14 +1,15 @@
 import express from "express";
 import { UserModel } from "../models/user.js";
 import { authentication, random } from "../helpers/index.js";
-import { ClientModel } from "../models/client.js";
+import { ClientModel, IClient } from "../models/client.js";
 import mongoose from "mongoose";
 
 export const register = async (req: express.Request, res: express.Response) => {
    try {
-      const { email, username, password, client_id } = req.body;
+      const { email, username, password, clientId } = req.body;
 
-      if (!email || !password || !username) return res.sendStatus(400);
+      if (!email || !password || !username || !clientId)
+         return res.status(400).json({ message: "Missing required fields" });
 
       // check if user email exists
       const existingUser = await UserModel.findOne({ email });
@@ -19,7 +20,7 @@ export const register = async (req: express.Request, res: express.Response) => {
             .end();
 
       // check if client exists
-      const existingClient = await ClientModel.findById(client_id);
+      const existingClient = await ClientModel.findById(clientId);
       if (!existingClient)
          return res.status(400).json({ message: "Client not found" }).end();
 
@@ -31,7 +32,7 @@ export const register = async (req: express.Request, res: express.Response) => {
             password: authentication(salt, password),
             salt,
          },
-         clientId: client_id,
+         clientId,
          isApproved: true,
          roleId: new mongoose.Types.ObjectId("2"), // admin role id
       }).save();
@@ -117,6 +118,24 @@ export const toggleApprovals = async (
          .status(400)
          .json({ error: `User approval failed with error: ${err}` })
          .end();
+   }
+};
+
+export const getAllUsers = async (
+   req: express.Request,
+   res: express.Response
+) => {
+   try {
+      const allUsers = await UserModel.find();
+      if (!allUsers.length)
+         return res.status(400).json({ message: "No users retrieved" }).end();
+
+      return res.status(200).json({ data: allUsers }).end();
+   } catch (err) {
+      console.log(err);
+      return res
+         .status(400)
+         .json({ error: `Get all users failed with error: ${err}` });
    }
 };
 
