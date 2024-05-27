@@ -8,6 +8,7 @@ import dotenv from "dotenv";
 import { authRouter } from "./router/authRouter.js";
 import { clientRouter } from "./router/clientRouter.js";
 import { categoryRouter } from "./router/categoryRouter.js";
+import { chatRouter } from "./router/chatRouter.js";
 
 dotenv.config();
 
@@ -29,6 +30,9 @@ const initializeApp = () => {
    app.use("/auth", authRouter);
    app.use("/client", clientRouter);
    app.use("/category", categoryRouter);
+   app.use("/chat", chatRouter);
+
+   // TODO: Setup initial client and roles upon app start-up
 
    return app;
 };
