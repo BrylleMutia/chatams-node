@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 interface IRole {
+   customId: Number;
    name: string;
 }
 
@@ -17,6 +18,7 @@ interface RoleModelType extends mongoose.Model<IRole> {
 
 const roleSchema = new mongoose.Schema<IRole, RoleModelType>(
    {
+      customId: { type: Number, required: true, unique: true },
       name: { type: String, required: true, unique: true },
    },
    {
