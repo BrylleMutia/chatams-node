@@ -9,6 +9,8 @@ import { authRouter } from "./router/authRouter.js";
 import { clientRouter } from "./router/clientRouter.js";
 import { categoryRouter } from "./router/categoryRouter.js";
 import { chatRouter } from "./router/chatRouter.js";
+import { initializeRoles } from "./seeders/roleSeeder.js";
+import { initializeClients } from "./seeders/clientSeeder.js";
 
 dotenv.config();
 
@@ -32,13 +34,16 @@ const initializeApp = () => {
    app.use("/category", categoryRouter);
    app.use("/chat", chatRouter);
 
-   // TODO: Setup initial client and roles upon app start-up
-
    return app;
 };
 
 mongoose.Promise = Promise;
-mongoose.connect(MONGO_URI).then(() => console.log("Connected to DB!"));
+mongoose.connect(MONGO_URI).then(() => {
+   console.log("Connected to DB!");
+
+   initializeRoles();
+   initializeClients();
+});
 mongoose.connection.on("error", (error: Error) => console.log(error));
 
 export { initializeApp };
