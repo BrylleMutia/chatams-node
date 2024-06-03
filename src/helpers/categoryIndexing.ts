@@ -1,5 +1,8 @@
 import fs from "fs";
 import path from "path";
+import { CategoryModel } from "../models/category.js";
+import { createIndex } from "./initializeIndex.js";
+import { ClientModel } from "../models/client.js";
 
 // create directory for each client
 export const createClientDirectory = (clientName: string) => {
@@ -47,4 +50,29 @@ export const createCategoryFolder = (clientName: string, category: string) => {
    }
 };
 
-// TODO: Continue transition for Category Indexing
+// create index for all categories that need initial index or reindexing
+export const createCategoryIndex = async (clientId: string) => {
+   const categoriesNeedIndex = await CategoryModel.find({
+      needIndex: true,
+      clientId,
+   }).exec();
+
+   if (!categoriesNeedIndex.length)
+      return console.log("No category needs indexing...");
+
+   const clientName = (await ClientModel.findById(clientId).exec()).name;
+
+   for (let category of categoriesNeedIndex) {
+      createIndex(clientName, category.name).then((index) => {
+         if (index) {
+            // once index is created, change status in db
+            category.needIndex = false;
+            category.save();
+
+            console.log(
+               `Rebuilding index for ${clientName}/${category.name} successful!`
+            );
+         }
+      });
+   }
+};

@@ -2,7 +2,7 @@
 import express from "express";
 import { UserModel } from "../models/user.js";
 import { UserHistoryModel } from "../models/userHistory.js";
-import { initializeIndex } from "../helpers/initializeIndex.js";
+import { createIndex } from "../helpers/initializeIndex.js";
 import { IClient } from "../models/client.js";
 
 export const ask = async (req: express.Request, res: express.Response) => {
@@ -28,7 +28,7 @@ export const ask = async (req: express.Request, res: express.Response) => {
          history.push(prompt);
          const query = history.join(" ");
 
-         const index = await initializeIndex(clientName, category);
+         const index = await createIndex(clientName, category);
          // get retriever
          const retriever = index.asRetriever();
          // Create a query engine

@@ -1,6 +1,6 @@
 import express from "express";
 import { UserModel } from "../models/user.js";
-import { authentication, random } from "../helpers/index.js";
+import { authentication, random } from "../helpers/hash.js";
 import { ClientModel, IClient } from "../models/client.js";
 import mongoose from "mongoose";
 
