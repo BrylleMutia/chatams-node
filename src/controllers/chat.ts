@@ -2,7 +2,7 @@
 import express from "express";
 import { UserModel } from "../models/user.js";
 import { UserHistoryModel } from "../models/userHistory.js";
-import { createIndex } from "../helpers/initializeIndex.js";
+import { loadIndex } from "../helpers/initializeIndex.js";
 import { IClient } from "../models/client.js";
 
 export const ask = async (req: express.Request, res: express.Response) => {
@@ -28,14 +28,10 @@ export const ask = async (req: express.Request, res: express.Response) => {
          history.push(prompt);
          const query = history.join(" ");
 
-         const index = await createIndex(clientName, category);
-         // get retriever
-         const retriever = index.asRetriever();
-         // Create a query engine
-         const queryEngine = index.asQueryEngine({ retriever });
-         const response = await queryEngine.query({ query });
+         // feed query to query engine with index
+         const response = await loadIndex(query, clientName, category);
 
-         return res.status(200).json({ data: response.toString() });
+         return res.status(200).json({ data: response });
       } else
          return res.status(400).json({ error: "Required fields are missing" });
    } catch (err) {
