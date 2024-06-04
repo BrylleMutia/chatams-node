@@ -4,8 +4,8 @@ import { CategoryModel } from "../models/category.js";
 import { createIndex } from "./initializeIndex.js";
 import { ClientModel } from "../models/client.js";
 
-// create directory for each client
-export const createClientDirectory = (clientName: string) => {
+// create file directory for each client
+export const createClientDirectory = async (clientName: string) => {
    const BASE_FOLDERS = ["docs", "docs_temp", "indexes"];
 
    for (const folder of BASE_FOLDERS) {

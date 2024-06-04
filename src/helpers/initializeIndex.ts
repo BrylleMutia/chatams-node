@@ -4,17 +4,31 @@ import {
    SimpleDirectoryReader,
    storageContextFromDefaults,
    VectorStoreIndex,
+   AzureOpenAI,
 } from "llamaindex";
 import dotenv from "dotenv";
 
 dotenv.config();
 
+
+// TODO: Fix invalid API error on chat trial
+// const llm = new AzureOpenAI(
+//    api_key
+// );
+
+// (model = os.getenv("OPENAI_GPT4_32K_ENGINE_MODEL")),
+//    (deployment_name = os.getenv("OPENAI_GPT4_32K_ENGINE_DEPLOYMENT")),
+//    (api_key = os.getenv("OPENAI_API_KEY")),
+//    (azure_endpoint = os.getenv("OPENAI_API_BASE")),
+//    (api_version = os.getenv("OPENAI_API_VERSION")),
+//    (temperature = 0.5)
+
 // initialize llm configuration
 Settings.llm = new OpenAI({ model: "gpt-4-32k", temperature: 0 });
 
 export const createIndex = async (clientName: string, category: string) => {
-   const docsPath = `src/docs/${clientName}/${category}`;
-   const indexPath = `src/indexes/${clientName}/${category}`;
+   const docsPath = `docs/${clientName}/${category}`;
+   const indexPath = `indexes/${clientName}/${category}`;
 
    // load data from documents within directory
    const documents = await new SimpleDirectoryReader().loadData({
