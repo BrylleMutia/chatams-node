@@ -25,7 +25,7 @@ const categorySchema = new mongoose.Schema<ICategory, CategoryModelType>(
          required: true,
          ref: "Client",
       },
-      needIndex: { type: Boolean, required: true, default: true },
+      needIndex: { type: Boolean, required: false, default: true },
    },
    {
       timestamps: true,
