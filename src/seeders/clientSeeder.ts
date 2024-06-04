@@ -1,6 +1,9 @@
-import { createClientDirectory } from "../helpers/categoryIndexing.js";
+import {
+   createCategoryIndex,
+   createClientDirectory,
+} from "../helpers/categoryIndexing.js";
 import { ClientModel } from "../models/client.js";
-import { initializeCategory } from "./categorySeeder.js";
+import { initializeCategoryInDB } from "./categorySeeder.js";
 
 export const initializeClients = async () => {
    const clients = [
@@ -29,8 +32,13 @@ export const initializeClients = async () => {
 
       await newClient.save();
 
-      initializeCategory(newClient._id);
-      createClientDirectory(newClient.name);
+      // add new category records for client in db
+      initializeCategoryInDB(newClient.id).then(() => {
+         // create file structure for client + indexes
+         createClientDirectory(newClient.name).then(() => {
+            createCategoryIndex(newClient.id);
+         });
+      });
 
       console.log(`Created initial client: ${newClient.name} `);
    }
