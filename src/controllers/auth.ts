@@ -3,6 +3,7 @@ import { UserModel } from "../models/user.js";
 import { authentication, random } from "../helpers/hash.js";
 import { ClientModel, IClient } from "../models/client.js";
 import mongoose from "mongoose";
+import { RoleModel } from "../models/role.js";
 
 export const register = async (req: express.Request, res: express.Response) => {
    try {
@@ -24,6 +25,9 @@ export const register = async (req: express.Request, res: express.Response) => {
       if (!existingClient)
          return res.status(400).json({ message: "Client not found" }).end();
 
+      // get role id for admin
+      const roleId = (await RoleModel.findOne({ name: "admin" })).id;
+
       const salt = random();
       const user = await UserModel.build({
          email,
@@ -32,9 +36,9 @@ export const register = async (req: express.Request, res: express.Response) => {
             password: authentication(salt, password),
             salt,
          },
-         clientId,
+         client: clientId,
          isApproved: true,
-         roleId: new mongoose.Types.ObjectId("2"), // admin role id
+         role: roleId, // admin role id
       }).save();
 
       return res.status(200).json({ data: user }).end();
