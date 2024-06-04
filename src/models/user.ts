@@ -9,8 +9,8 @@ interface IUser {
       salt?: string;
       sessionToken?: string;
    };
-   clientId: mongoose.Types.ObjectId;
-   roleId: mongoose.Types.ObjectId;
+   client: mongoose.Types.ObjectId;
+   role: mongoose.Types.ObjectId;
    isApproved: boolean;
 }
 
@@ -34,13 +34,13 @@ const UserSchema = new mongoose.Schema<IUser, UserModelType>(
          salt: { type: String, select: false },
          sessionToken: { type: String, select: false },
       },
-      clientId: {
-         type: mongoose.SchemaTypes.ObjectId,
+      client: {
+         type: mongoose.Schema.Types.ObjectId,
          required: true,
          ref: "Client",
       },
-      roleId: {
-         type: mongoose.SchemaTypes.ObjectId,
+      role: {
+         type: mongoose.Schema.Types.ObjectId,
          required: true,
          ref: "Role",
       },
@@ -55,7 +55,3 @@ export const UserModel = mongoose.model<IUser, UserModelType>(
    "User",
    UserSchema
 );
-
-// TODO: Add controllers / blueprints
-// TODO: Add routers
-// TODO: How to track objects that need indexing (prev was using separate model)
