@@ -14,7 +14,7 @@ import { initializeClients } from "./seeders/clientSeeder.js";
 
 dotenv.config();
 
-export const MONGO_URI = `mongodb+srv://bryllemutia:${process.env.MONGO_PASSWORD}@cluster0.qt8cm1e.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+export const MONGO_URI = process.env.MONGO_URI;
 
 // you can explicitly annotate the types, but is not required
 const initializeApp = () => {
