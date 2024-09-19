@@ -7,9 +7,10 @@ import { RoleModel } from "../models/role.js";
 
 export const register = async (req: express.Request, res: express.Response) => {
    try {
-      const { email, username, password, clientId } = req.body;
+      const { email, username, password, clientName } = req.body;
+      console.log(req.body)
 
-      if (!email || !password || !username || !clientId)
+      if (!email || !password || !username || !clientName)
          return res.status(400).json({ message: "Missing required fields" });
 
       // check if user email exists
@@ -21,7 +22,7 @@ export const register = async (req: express.Request, res: express.Response) => {
             .end();
 
       // check if client exists
-      const existingClient = await ClientModel.findById(clientId);
+      const existingClient = await ClientModel.findOne({ name: clientName });
       if (!existingClient)
          return res.status(400).json({ message: "Client not found" }).end();
 
@@ -36,7 +37,7 @@ export const register = async (req: express.Request, res: express.Response) => {
             password: authentication(salt, password),
             salt,
          },
-         client: clientId,
+         client: existingClient.id,
          isApproved: true,
          role: roleId, // admin role id
       }).save();
